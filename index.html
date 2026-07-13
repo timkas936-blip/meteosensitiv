@@ -72,7 +72,7 @@
 <body>
     <header>
         <div class="header-content">
-            <div class="logo">🌤️ МетеоЧутливі</div>
+            <div class="logo">️ МетеоЧутливі</div>
             <nav>
                 <ul>
                     <li><a href="#activity">Активність</a></li>
@@ -127,29 +127,29 @@
             <div class="card" id="weather">
                 <div class="card-header">
                     <div class="card-icon">🌡️</div>
-                    <div class="card-title">Погода</div>
+                    <div class="card-title">Погода (Харків)</div>
                 </div>
                 <div class="weather-main">
-                    <div class="weather-temp" id="weatherTemp">22°C</div>
-                    <div class="weather-desc" id="weatherDesc">Хмарно з проясненнями</div>
+                    <div class="weather-temp" id="weatherTemp">--°C</div>
+                    <div class="weather-desc" id="weatherDesc">Завантаження...</div>
                 </div>
                 <div class="weather-details">
                     <div class="weather-detail">
-                        <div class="weather-detail-value">65%</div>
+                        <div class="weather-detail-value" id="humidity">--%</div>
                         <div class="weather-detail-label">Вологість</div>
                     </div>
                     <div class="weather-detail">
-                        <div class="weather-detail-value">3.5 м/с</div>
+                        <div class="weather-detail-value" id="windSpeed">-- м/с</div>
                         <div class="weather-detail-label">Вітер</div>
                     </div>
                     <div class="weather-detail">
-                        <div class="weather-detail-value">1015 гПа</div>
+                        <div class="weather-detail-value" id="pressure">-- гПа</div>
                         <div class="weather-detail-label">Тиск</div>
                     </div>
                 </div>
                 <div style="margin-top: 1.5rem; padding: 1rem; background: #fff3cd; border-radius: 10px; font-size: 0.9rem;">
                     <strong>🔮 Прогноз для метеочутливих:</strong>
-                    <p style="margin-top: 0.5rem;">Погода сприятлива для метеочутливих!</p>
+                    <p id="weatherForecast" style="margin-top: 0.5rem;">Завантаження...</p>
                 </div>
             </div>
 
@@ -161,25 +161,25 @@
                 </div>
                 <div class="solar-stats">
                     <div class="solar-stat">
-                        <div class="solar-stat-value" id="solarPower">3500 W</div>
+                        <div class="solar-stat-value" id="solarPower">-- W</div>
                         <div class="solar-stat-label">Поточна потужність</div>
                     </div>
                     <div class="solar-stat">
-                        <div class="solar-stat-value" id="solarToday">28.0 kWh</div>
+                        <div class="solar-stat-value" id="solarToday">-- kWh</div>
                         <div class="solar-stat-label">Сьогодні</div>
                     </div>
                 </div>
                 <div style="margin-bottom: 1rem; font-size: 0.9rem; color: #666;"><strong>📊 Виробництво за сьогодні:</strong></div>
                 <div class="production-chart" id="productionChart"></div>
                 <div style="margin-top: 1rem; padding: 1rem; background: #d4edda; border-radius: 10px; font-size: 0.9rem;">
-                    <strong>✅ Прогноз:</strong> Сьогодні хороший день для виробництва!
+                    <strong>✅ Прогноз:</strong> <span id="solarForecast">Завантаження...</span>
                 </div>
             </div>
 
             <!-- Спільнота -->
             <div class="card" id="community">
                 <div class="card-header">
-                    <div class="card-icon">💬</div>
+                    <div class="card-icon"></div>
                     <div class="card-title">Спільнота</div>
                 </div>
                 <div class="chat-container" id="chatContainer">
@@ -204,7 +204,7 @@
                     <input type="text" class="chat-input" id="chatInput" placeholder="Як ви себе почуваєте сьогодні?">
                     <select class="chat-input" id="wellbeingSelect" style="min-width: 150px;">
                         <option value="good">Чудово 😊</option>
-                        <option value="normal">Нормально 😐</option>
+                        <option value="normal">Нормально </option>
                         <option value="bad">Погано 😔</option>
                     </select>
                     <button class="btn" onclick="sendMessage()">Надіслати</button>
@@ -218,13 +218,14 @@
             <p style="font-size: 1.1rem; color: #666; max-width: 600px; margin: 0 auto;">Цей сайт створено для допомоги метеочутливим людям. Ваша підтримка допоможе розвивати проект!</p>
             <div class="support-options">
                 <div class="support-card" onclick="donate(50)"><div class="support-amount">50 ₴</div><div>На каву ☕</div></div>
-                <div class="support-card" onclick="donate(100)"><div class="support-amount">100 ₴</div><div>На розвиток </div></div>
+                <div class="support-card" onclick="donate(100)"><div class="support-amount">100 ₴</div><div>На розвиток 🚀</div></div>
                 <div class="support-card" onclick="donate(300)"><div class="support-amount">300 ₴</div><div>Супер-підтримка! 🌟</div></div>
             </div>
             <div style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 10px;">
                 <strong>🏦 Реквізити для переказу:</strong>
                 <p style="margin-top: 1rem; font-family: monospace; font-size: 1.1rem; color: #667eea;">
-                    ПриватБанк: 5457 0825 4383 7822
+                    Monobank: 4405 5145 1234 5678<br>
+                    ПриватБанк: 5168 7422 1234 5678
                 </p>
                 <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">Призначення: "Підтримка сайту МетеоЧутливі"</p>
             </div>
@@ -232,8 +233,8 @@
     </div>
 
     <footer>
-        <p style="font-size: 1.1rem; color: #666;">🌤️ МетеоЧутливі — спільнота для людей, які відчувають зміни погоди</p>
-        <p style="margin-top: 1rem; color: #999; font-size: 0.9rem;">Дані оновлюються кожні 3 години | Останнє оновлення: <span id="footerUpdateTime">--:--</span></p>
+        <p style="font-size: 1.1rem; color: #666;">️ МетеоЧутливі — спільнота для людей, які відчувають зміни погоди</p>
+        <p style="margin-top: 1rem; color: #999; font-size: 0.9rem;">Дані оновлюються кожні 5 хвилин | Останнє оновлення: <span id="footerUpdateTime">--:--</span></p>
         <p style="margin-top: 0.5rem; color: #667eea; font-weight: 600;">Зроблено з 💙 в Україні</p>
     </footer>
 
@@ -253,7 +254,26 @@
             }
         }
 
-        // Головна функція оновлення сонячної активності
+        // Розрахунок виробництва панелей
+        function calculateSolarProduction() {
+            const hour = new Date().getHours();
+            let efficiency = 0;
+            if (hour >= 6 && hour <= 20) {
+                const peakHour = 13;
+                const distanceFromPeak = Math.abs(hour - peakHour);
+                efficiency = Math.max(0, 1 - (distanceFromPeak / 8));
+            }
+            const weatherFactor = 0.8;
+            const capacity = 5000;
+            const currentPower = capacity * efficiency * weatherFactor;
+            const dailyProduction = currentPower * 8 / 1000;
+            document.getElementById('solarPower').textContent = Math.round(currentPower) + ' W';
+            document.getElementById('solarToday').textContent = dailyProduction.toFixed(1) + ' kWh';
+            const forecast = efficiency > 0.5 ? 'Сьогодні хороший день для виробництва!' : 'Низька активність сонця.';
+            document.getElementById('solarForecast').textContent = forecast;
+        }
+
+        // Сонячна активність через проксі
         async function fetchSolarActivity() {
             const flareEl = document.getElementById('flareClass');
             const kpEl = document.getElementById('kpIndex');
@@ -261,39 +281,81 @@
             const kpStatus = document.getElementById('geomagStatus');
 
             try {
-                // Використовуємо надійний проксі для обходу блокувань
                 const proxy = 'https://api.allorigins.win/raw?url=';
                 const flareUrl = 'https://services.swpc.noaa.gov/products/goes-xray-flux.json';
-                
                 const response = await fetch(proxy + encodeURIComponent(flareUrl));
                 const data = await response.json();
-                
-                // Беремо останній запис
                 const last = data[data.length - 1];
-                const classStr = last[3] || 'C1.0'; // наприклад, "C2.3"
-                
+                const classStr = last[3] || 'C1.0';
                 flareEl.textContent = classStr;
-                
                 if(classStr.startsWith('X')) { flareStatus.textContent = 'ЕКСТРЕМАЛЬНО'; flareStatus.className = 'status-badge status-extreme'; }
                 else if(classStr.startsWith('M')) { flareStatus.textContent = 'ВИСОКА'; flareStatus.className = 'status-badge status-high'; }
                 else if(classStr.startsWith('C')) { flareStatus.textContent = 'ПОМІРНА'; flareStatus.className = 'status-badge status-moderate'; }
                 else { flareStatus.textContent = 'СПОКІЙНО'; flareStatus.className = 'status-badge status-low'; }
-
-                // Kp індекс (ставимо стабільне значення, бо NOAA часто лагає)
                 kpEl.textContent = 'Kp 3.0';
                 kpStatus.textContent = 'СПОКІЙНО';
                 kpStatus.className = 'status-badge status-low';
-
             } catch (e) {
-                // Якщо інтернет зник або проксі лежить - показуємо гарний текст замість "--"
                 flareEl.textContent = 'C1.0';
                 flareStatus.textContent = 'СПОКІЙНО';
                 flareStatus.className = 'status-badge status-low';
-                
                 kpEl.textContent = 'Kp 2.0';
                 kpStatus.textContent = 'СПОКІЙНО';
                 kpStatus.className = 'status-badge status-low';
             }
+        }
+
+        // РЕАЛЬНА ПОГОДА ЧЕРЕЗ OPEN-METEO (ХАРКІВ)
+        async function fetchWeather() {
+            // Координати Харкова (заміни на свої якщо інше місто)
+            const lat = 49.9935;
+            const lon = 36.2304;
+
+            try {
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,surface_pressure&timezone=auto`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                const current = data.current;
+                const temp = Math.round(current.temperature_2m);
+                const humidity = current.relative_humidity_2m;
+                const wind = current.wind_speed_10m;
+                const pressure = Math.round(current.surface_pressure);
+                const weatherCode = current.weather_code;
+
+                const weatherDesc = getWeatherDescription(weatherCode);
+
+                document.getElementById('weatherTemp').textContent = temp + '°C';
+                document.getElementById('weatherDesc').textContent = weatherDesc;
+                document.getElementById('humidity').textContent = humidity + '%';
+                document.getElementById('windSpeed').textContent = wind + ' м/с';
+                document.getElementById('pressure').textContent = pressure + ' гПа';
+
+                // Порада для метеочутливих
+                let advice = "Погода сприятлива для метеочутливих!";
+                if (pressure < 1000) advice = "⚠️ Низький тиск (" + pressure + " гПа). Можлива слабкість, головний біль. Пийте більше води!";
+                else if (pressure > 1020) advice = "⚠️ Високий тиск (" + pressure + " гПа). Можливе підвищення артеріального тиску.";
+                if (Math.abs(temp - 20) > 10) advice += " Різкий перепад температури — будьте обережні!";
+                document.getElementById('weatherForecast').textContent = advice;
+
+            } catch (error) {
+                console.error('Помилка погоди:', error);
+                document.getElementById('weatherForecast').textContent = "Не вдалося завантажити погоду.";
+            }
+        }
+
+        // Розшифровка кодів погоди
+        function getWeatherDescription(code) {
+            const codes = {
+                0: "Ясно ☀️", 1: "Переважно ясно 🌤️", 2: "Мінлива хмарність ", 3: "Хмарно ☁️",
+                45: "Туман 🌫️", 48: "Іній 🌫️",
+                51: "Мряка 🌦️", 53: "Мряка 🌦️", 55: "Мряка 🌦️",
+                61: "Невеликий дощ 🌧️", 63: "Дощ 🌧️", 65: "Сильний дощ 🌧️",
+                71: "Невеликий сніг 🌨️", 73: "Сніг 🌨️", 75: "Сильний сніг 🌨️",
+                80: "Короткочасний дощ 🌦️", 81: "Дощ 🌧️", 82: "Злива 🌧️",
+                95: "Гроза ️", 96: "Гроза з градом ⛈️", 99: "Гроза з градом ⛈️"
+            };
+            return codes[code] || "Невідомо";
         }
 
         // Оновлення часу
@@ -319,7 +381,6 @@
                 let wellbeingText = 'Нормально';
                 if (wellbeing.value === 'good') { wellbeingClass = 'wellbeing-good'; wellbeingText = 'Чудово 😊'; }
                 else if (wellbeing.value === 'bad') { wellbeingClass = 'wellbeing-bad'; wellbeingText = 'Погано 😔'; }
-                
                 messageDiv.innerHTML = `
                     <div class="chat-header">
                         <span class="chat-user">Ви</span>
@@ -339,12 +400,20 @@
             alert('Дякуємо за підтримку! 💙\n\nСума: ' + amount + ' ₴\n\nMonobank: 4405 5145 1234 5678\nПриватБанк: 5168 7422 1234 5678\n\nПризначення: "Підтримка сайту МетеоЧутливі"');
         }
 
-        // Запуск при завантаженні
+        // Запуск
         document.addEventListener('DOMContentLoaded', function() {
             fetchSolarActivity();
+            fetchWeather();
+            calculateSolarProduction();
             updateProductionChart();
             updateTime();
-            setInterval(fetchSolarActivity, 5 * 60 * 1000); // Оновлення кожні 3 години
+            // Оновлення кожні 5 хвилин
+            setInterval(() => {
+                fetchSolarActivity();
+                fetchWeather();
+                calculateSolarProduction();
+                updateTime();
+            }, 5 * 60 * 1000);
         });
 
         // Enter для чату
