@@ -238,188 +238,204 @@
     </footer>
 
     <script>
-        // Оновлення графіка панелей
-        function updateProductionChart() {
-            const chart = document.getElementById('productionChart');
-            chart.innerHTML = '';
-            for (let hour = 6; hour <= 20; hour++) {
-                const bar = document.createElement('div');
-                bar.className = 'chart-bar';
-                const peakHour = 13;
-                const distanceFromPeak = Math.abs(hour - peakHour);
-                const height = Math.max(10, 100 - (distanceFromPeak * 12));
-                bar.style.height = height + '%';
-                chart.appendChild(bar);
-            }
+    let currentWeatherCode = 0; // Глобальная переменная для кода погоды
+
+    // 1. График панелей (рисуем дугу)
+    function updateProductionChart() {
+        const chart = document.getElementById('productionChart');
+        chart.innerHTML = '';
+        for (let hour = 6; hour <= 20; hour++) {
+            const bar = document.createElement('div');
+            bar.className = 'chart-bar';
+            const peakHour = 13;
+            const distanceFromPeak = Math.abs(hour - peakHour);
+            const height = Math.max(10, 100 - (distanceFromPeak * 12));
+            bar.style.height = height + '%';
+            chart.appendChild(bar);
+        }
+    }
+
+    // 2. Реальный расчет панелей по погоде и времени
+    function calculateSolarProduction() {
+        const hour = new Date().getHours();
+        let timeFactor = 0;
+
+        // Кривая выработки по времени (с 6 до 20 часов, пик в 13:00)
+        if (hour >= 6 && hour <= 20) {
+            timeFactor = 1 - Math.pow((hour - 13) / 7.5, 2);
+            if (timeFactor < 0) timeFactor = 0;
         }
 
-        // Розрахунок виробництва панелей
-        function calculateSolarProduction() {
-            const hour = new Date().getHours();
-            let efficiency = 0;
-            if (hour >= 6 && hour <= 20) {
-                const peakHour = 13;
-                const distanceFromPeak = Math.abs(hour - peakHour);
-                efficiency = Math.max(0, 1 - (distanceFromPeak / 8));
-            }
-            const weatherFactor = 0.8;
-            const capacity = 5000;
-            const currentPower = capacity * efficiency * weatherFactor;
-            const dailyProduction = currentPower * 8 / 1000;
-            document.getElementById('solarPower').textContent = Math.round(currentPower) + ' W';
-            document.getElementById('solarToday').textContent = dailyProduction.toFixed(1) + ' kWh';
-            const forecast = efficiency > 0.5 ? 'Сьогодні хороший день для виробництва!' : 'Низька активність сонця.';
-            document.getElementById('solarForecast').textContent = forecast;
+        // Коэффициент погоды
+        let weatherFactor = 1.0;
+        const code = currentWeatherCode;
+
+        if (code === 0 || code === 1) weatherFactor = 1.0;       // Ясно
+        else if (code === 2 || code === 3) weatherFactor = 0.6;  // Облачно
+        else if (code >= 45 && code <= 48) weatherFactor = 0.2;  // Туман
+        else if (code >= 51 && code <= 67) weatherFactor = 0.15; // Дождь/Мряка
+        else if (code >= 71 && code <= 77) weatherFactor = 0.1;  // Снег
+        else if (code >= 80 && code <= 82) weatherFactor = 0.2;  // Ливень
+        else if (code >= 95) weatherFactor = 0.05;               // Гроза
+
+        // Базовая мощность системы 5000 Вт (5 кВт)
+        let currentPower = 5000 * timeFactor * weatherFactor;
+        if (currentPower < 10) currentPower = 0;
+
+        // Примерный расчет выработки за день
+        let todayKwh = (currentPower / 1000) * Math.max(1, hour - 6) * 0.8;
+
+        document.getElementById('solarPower').textContent = Math.round(currentPower) + ' W';
+        document.getElementById('solarToday').textContent = todayKwh.toFixed(1) + ' kWh';
+
+        let forecastText = "Низкая активность.";
+        if (currentPower > 3000) forecastText = "Отличная выработка! ☀️";
+        else if (currentPower > 1000) forecastText = "Хорошая выработка ⛅";
+        else if (currentPower > 0) forecastText = "Слабая выработка из-за облаков ☁️";
+        document.getElementById('solarForecast').textContent = forecastText;
+    }
+
+    // 3. Сонячна активність
+    async function fetchSolarActivity() {
+        const flareEl = document.getElementById('flareClass');
+        const kpEl = document.getElementById('kpIndex');
+        const flareStatus = document.getElementById('flareStatus');
+        const kpStatus = document.getElementById('geomagStatus');
+
+        try {
+            const proxy = 'https://api.allorigins.win/raw?url=';
+            const flareUrl = 'https://services.swpc.noaa.gov/products/goes-xray-flux.json';
+            const response = await fetch(proxy + encodeURIComponent(flareUrl));
+            const data = await response.json();
+            const last = data[data.length - 1];
+            const classStr = last[3] || 'C1.0';
+            flareEl.textContent = classStr;
+            if(classStr.startsWith('X')) { flareStatus.textContent = 'ЕКСТРЕМАЛЬНО'; flareStatus.className = 'status-badge status-extreme'; }
+            else if(classStr.startsWith('M')) { flareStatus.textContent = 'ВИСОКА'; flareStatus.className = 'status-badge status-high'; }
+            else if(classStr.startsWith('C')) { flareStatus.textContent = 'ПОМІРНА'; flareStatus.className = 'status-badge status-moderate'; }
+            else { flareStatus.textContent = 'СПОКІЙНО'; flareStatus.className = 'status-badge status-low'; }
+            kpEl.textContent = 'Kp 3.0';
+            kpStatus.textContent = 'СПОКІЙНО';
+            kpStatus.className = 'status-badge status-low';
+        } catch (e) {
+            flareEl.textContent = 'C1.0';
+            flareStatus.textContent = 'СПОКІЙНО';
+            flareStatus.className = 'status-badge status-low';
+            kpEl.textContent = 'Kp 2.0';
+            kpStatus.textContent = 'СПОКІЙНО';
+            kpStatus.className = 'status-badge status-low';
         }
+    }
 
-        // Сонячна активність через проксі
-        async function fetchSolarActivity() {
-            const flareEl = document.getElementById('flareClass');
-            const kpEl = document.getElementById('kpIndex');
-            const flareStatus = document.getElementById('flareStatus');
-            const kpStatus = document.getElementById('geomagStatus');
+    // 4. РЕАЛЬНА ПОГОДА (ХАРКІВ)
+    async function fetchWeather() {
+        const lat = 49.9935;
+        const lon = 36.2304;
 
-            try {
-                const proxy = 'https://api.allorigins.win/raw?url=';
-                const flareUrl = 'https://services.swpc.noaa.gov/products/goes-xray-flux.json';
-                const response = await fetch(proxy + encodeURIComponent(flareUrl));
-                const data = await response.json();
-                const last = data[data.length - 1];
-                const classStr = last[3] || 'C1.0';
-                flareEl.textContent = classStr;
-                if(classStr.startsWith('X')) { flareStatus.textContent = 'ЕКСТРЕМАЛЬНО'; flareStatus.className = 'status-badge status-extreme'; }
-                else if(classStr.startsWith('M')) { flareStatus.textContent = 'ВИСОКА'; flareStatus.className = 'status-badge status-high'; }
-                else if(classStr.startsWith('C')) { flareStatus.textContent = 'ПОМІРНА'; flareStatus.className = 'status-badge status-moderate'; }
-                else { flareStatus.textContent = 'СПОКІЙНО'; flareStatus.className = 'status-badge status-low'; }
-                kpEl.textContent = 'Kp 3.0';
-                kpStatus.textContent = 'СПОКІЙНО';
-                kpStatus.className = 'status-badge status-low';
-            } catch (e) {
-                flareEl.textContent = 'C1.0';
-                flareStatus.textContent = 'СПОКІЙНО';
-                flareStatus.className = 'status-badge status-low';
-                kpEl.textContent = 'Kp 2.0';
-                kpStatus.textContent = 'СПОКІЙНО';
-                kpStatus.className = 'status-badge status-low';
-            }
+        try {
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,surface_pressure&timezone=auto`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            const current = data.current;
+            const temp = Math.round(current.temperature_2m);
+            const humidity = current.relative_humidity_2m;
+            const wind = current.wind_speed_10m;
+            const pressure = Math.round(current.surface_pressure);
+
+            // ВАЖНО: сохраняем код погоды в глобальную переменную для панелей!
+            currentWeatherCode = current.weather_code;
+
+            const weatherDesc = getWeatherDescription(currentWeatherCode);
+
+            document.getElementById('weatherTemp').textContent = temp + '°C';
+            document.getElementById('weatherDesc').textContent = weatherDesc;
+            document.getElementById('humidity').textContent = humidity + '%';
+            document.getElementById('windSpeed').textContent = wind + ' м/с';
+            document.getElementById('pressure').textContent = pressure + ' гПа';
+
+            let advice = "Погода сприятлива для метеочутливих!";
+            if (pressure < 1000) advice = "⚠️ Низький тиск (" + pressure + " гПа). Можлива слабкість, головний біль. Пийте більше води!";
+            else if (pressure > 1020) advice = "⚠️ Високий тиск (" + pressure + " гПа). Можливе підвищення артеріального тиску.";
+            if (Math.abs(temp - 20) > 10) advice += " Різкий перепад температури — будьте обережні!";
+            document.getElementById('weatherForecast').textContent = advice;
+
+        } catch (error) {
+            console.error('Помилка погоди:', error);
         }
+    }
 
-        // РЕАЛЬНА ПОГОДА ЧЕРЕЗ OPEN-METEO (ХАРКІВ)
-        async function fetchWeather() {
-            // Координати Харкова (заміни на свої якщо інше місто)
-            const lat = 49.9935;
-            const lon = 36.2304;
+    function getWeatherDescription(code) {
+        const codes = {
+            0: "Ясно ☀️", 1: "Переважно ясно ️", 2: "Мінлива хмарність ⛅", 3: "Хмарно ☁️",
+            45: "Туман 🌫️", 48: "Іній 🌫️",
+            51: "Мряка 🌦️", 53: "Мряка 🌦️", 55: "Мряка 🌦️",
+            61: "Невеликий дощ 🌧️", 63: "Дощ 🌧️", 65: "Сильний дощ 🌧️",
+            71: "Невеликий сніг 🌨️", 73: "Сніг 🌨️", 75: "Сильний сніг 🌨️",
+            80: "Короткочасний дощ 🌦️", 81: "Дощ 🌧️", 82: "Злива 🌧️",
+            95: "Гроза ️", 96: "Гроза з градом ⛈️", 99: "Гроза з градом ⛈️"
+        };
+        return codes[code] || "Невідомо";
+    }
 
-            try {
-                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,surface_pressure&timezone=auto`;
-                const response = await fetch(url);
-                const data = await response.json();
+    function updateTime() {
+        const now = new Date();
+        const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        document.getElementById('lastUpdate').textContent = 'Оновлено: ' + timeStr;
+        document.getElementById('footerUpdateTime').textContent = timeStr;
+    }
 
-                const current = data.current;
-                const temp = Math.round(current.temperature_2m);
-                const humidity = current.relative_humidity_2m;
-                const wind = current.wind_speed_10m;
-                const pressure = Math.round(current.surface_pressure);
-                const weatherCode = current.weather_code;
-
-                const weatherDesc = getWeatherDescription(weatherCode);
-
-                document.getElementById('weatherTemp').textContent = temp + '°C';
-                document.getElementById('weatherDesc').textContent = weatherDesc;
-                document.getElementById('humidity').textContent = humidity + '%';
-                document.getElementById('windSpeed').textContent = wind + ' м/с';
-                document.getElementById('pressure').textContent = pressure + ' гПа';
-
-                // Порада для метеочутливих
-                let advice = "Погода сприятлива для метеочутливих!";
-                if (pressure < 1000) advice = "⚠️ Низький тиск (" + pressure + " гПа). Можлива слабкість, головний біль. Пийте більше води!";
-                else if (pressure > 1020) advice = "⚠️ Високий тиск (" + pressure + " гПа). Можливе підвищення артеріального тиску.";
-                if (Math.abs(temp - 20) > 10) advice += " Різкий перепад температури — будьте обережні!";
-                document.getElementById('weatherForecast').textContent = advice;
-
-            } catch (error) {
-                console.error('Помилка погоди:', error);
-                document.getElementById('weatherForecast').textContent = "Не вдалося завантажити погоду.";
-            }
-        }
-
-        // Розшифровка кодів погоди
-        function getWeatherDescription(code) {
-            const codes = {
-                0: "Ясно ☀️", 1: "Переважно ясно 🌤️", 2: "Мінлива хмарність ", 3: "Хмарно ☁️",
-                45: "Туман 🌫️", 48: "Іній 🌫️",
-                51: "Мряка 🌦️", 53: "Мряка 🌦️", 55: "Мряка 🌦️",
-                61: "Невеликий дощ 🌧️", 63: "Дощ 🌧️", 65: "Сильний дощ 🌧️",
-                71: "Невеликий сніг 🌨️", 73: "Сніг 🌨️", 75: "Сильний сніг 🌨️",
-                80: "Короткочасний дощ 🌦️", 81: "Дощ 🌧️", 82: "Злива 🌧️",
-                95: "Гроза ️", 96: "Гроза з градом ⛈️", 99: "Гроза з градом ⛈️"
-            };
-            return codes[code] || "Невідомо";
-        }
-
-        // Оновлення часу
-        function updateTime() {
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const wellbeing = document.getElementById('wellbeingSelect');
+        const message = input.value.trim();
+        if (message) {
+            const container = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message';
             const now = new Date();
             const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('lastUpdate').textContent = 'Оновлено: ' + timeStr;
-            document.getElementById('footerUpdateTime').textContent = timeStr;
+            let wellbeingClass = 'wellbeing-normal';
+            let wellbeingText = 'Нормально';
+            if (wellbeing.value === 'good') { wellbeingClass = 'wellbeing-good'; wellbeingText = 'Чудово 😊'; }
+            else if (wellbeing.value === 'bad') { wellbeingClass = 'wellbeing-bad'; wellbeingText = 'Погано 😔'; }
+            messageDiv.innerHTML = `<div class="chat-header"><span class="chat-user">Ви</span><span class="chat-time">${timeStr}</span></div><div>${message}</div><span class="chat-wellbeing ${wellbeingClass}">${wellbeingText}</span>`;
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+            input.value = '';
         }
+    }
 
-        // Чат
-        function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const wellbeing = document.getElementById('wellbeingSelect');
-            const message = input.value.trim();
-            if (message) {
-                const container = document.getElementById('chatContainer');
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'chat-message';
-                const now = new Date();
-                const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-                let wellbeingClass = 'wellbeing-normal';
-                let wellbeingText = 'Нормально';
-                if (wellbeing.value === 'good') { wellbeingClass = 'wellbeing-good'; wellbeingText = 'Чудово 😊'; }
-                else if (wellbeing.value === 'bad') { wellbeingClass = 'wellbeing-bad'; wellbeingText = 'Погано 😔'; }
-                messageDiv.innerHTML = `
-                    <div class="chat-header">
-                        <span class="chat-user">Ви</span>
-                        <span class="chat-time">${timeStr}</span>
-                    </div>
-                    <div>${message}</div>
-                    <span class="chat-wellbeing ${wellbeingClass}">${wellbeingText}</span>
-                `;
-                container.appendChild(messageDiv);
-                container.scrollTop = container.scrollHeight;
-                input.value = '';
-            }
-        }
+    function donate(amount) {
+        // Не забудь поменять цифры карт здесь на свои, если хочешь, чтобы они всплывали при клике!
+        alert('Дякуємо за підтримку! 💙\n\nСума: ' + amount + ' ПриватБанк: 5457 0825 4383 7822\n\nПризначення: "Підтримка сайту МетеоЧутливі"');
+    }
 
-        // Донат
-        function donate(amount) {
-        
-            alert('Дякуємо за підтримку! 💙\n\nСума: ' + amount + ' ₴\n\nMonobank:ПриватБанк: 5457 0825 43837822\n\nПризначення: "Підтримка сайту МетеоЧутливі"');
-        }
+    // ЗАПУСК
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchSolarActivity();
+        fetchWeather();
+        calculateSolarProduction(); 
+        updateProductionChart();
+        updateTime();
 
-        // Запуск
-        document.addEventListener('DOMContentLoaded', function() {
+        // Ждем 2 секунды пока погода загрузится, чтобы пересчитать панели
+        setTimeout(() => {
+            calculateSolarProduction();
+        }, 2000);
+
+        // Обновление каждые 5 минут
+        setInterval(() => {
             fetchSolarActivity();
             fetchWeather();
             calculateSolarProduction();
-            updateProductionChart();
             updateTime();
-            // Оновлення кожні 5 хвилин
-            setInterval(() => {
-                fetchSolarActivity();
-                fetchWeather();
-                calculateSolarProduction();
-                updateTime();
-            }, 5 * 60 * 1000);
-        });
+        }, 5 * 60 * 1000);
+    });
 
-        // Enter для чату
-        document.getElementById('chatInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') sendMessage();
-        });
-    </script>
+    document.getElementById('chatInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') sendMessage();
+    });
+</script>
 </body>
 </html>
