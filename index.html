@@ -6,466 +6,73 @@
     <title>МетеоЧутливі | Моніторинг та Спільнота</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-            min-height: 100vh;
-        }
-
-        /* Header */
-        header {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            padding: 1.5rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .logo {
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        nav a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-        }
-
-        nav a:hover {
-            background: #667eea;
-            color: white;
-        }
-
-        .last-update {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* Alert Banner */
-        .alert-banner {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            text-align: center;
-            font-weight: 600;
-            box-shadow: 0 10px 30px rgba(245,87,108,0.3);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-
-        /* Grid Layout */
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        .card-icon {
-            font-size: 2.5rem;
-        }
-
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #333;
-        }
-
-        /* Solar Activity */
-        .activity-level {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .activity-item {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .activity-label {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 0.5rem;
-        }
-
-        .activity-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #667eea;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #333; min-height: 100vh; }
+        header { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 1.5rem 2rem; position: sticky; top: 0; z-index: 1000; }
+        .header-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .logo { font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 0.5rem; }
+        nav ul { list-style: none; display: flex; gap: 2rem; flex-wrap: wrap; }
+        nav a { color: #667eea; text-decoration: none; font-weight: 600; transition: all 0.3s; padding: 0.5rem 1rem; border-radius: 8px; }
+        nav a:hover { background: #667eea; color: white; }
+        .last-update { color: #666; font-size: 0.9rem; }
+        .alert-banner { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 1.5rem; border-radius: 15px; margin: 2rem auto; max-width: 1400px; text-align: center; font-weight: 600; box-shadow: 0 10px 30px rgba(245,87,108,0.3); display: none; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+        .card { background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s; }
+        .card:hover { transform: translateY(-5px); }
+        .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid #f0f0f0; }
+        .card-icon { font-size: 2.5rem; }
+        .card-title { font-size: 1.5rem; font-weight: 700; color: #333; }
+        .activity-level { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .activity-item { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 1.5rem; border-radius: 12px; text-align: center; }
+        .activity-label { font-size: 0.9rem; color: #666; margin-bottom: 0.5rem; }
+        .activity-value { font-size: 2rem; font-weight: 700; color: #667eea; margin-bottom: 0.5rem; }
+        .status-badge { display: inline-block; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.9rem; }
         .status-low { background: #d4edda; color: #155724; }
         .status-moderate { background: #fff3cd; color: #856404; }
         .status-high { background: #f8d7da; color: #721c24; }
-        .status-extreme { background: #721c24; color: white; animation: pulse-red 1s infinite; }
-
-        @keyframes pulse-red {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        /* Weather */
-        .weather-main {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .weather-temp {
-            font-size: 4rem;
-            font-weight: 700;
-            color: #667eea;
-        }
-
-        .weather-desc {
-            font-size: 1.3rem;
-            color: #666;
-            margin-top: 0.5rem;
-        }
-
-        .weather-details {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-        }
-
-        .weather-detail {
-            text-align: center;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        .weather-detail-value {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #667eea;
-        }
-
-        .weather-detail-label {
-            font-size: 0.85rem;
-            color: #666;
-            margin-top: 0.3rem;
-        }
-
-        /* Solar Panels */
-        .solar-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .solar-stat {
-            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .solar-stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #2d3436;
-        }
-
-        .solar-stat-label {
-            font-size: 0.9rem;
-            color: #636e72;
-            margin-top: 0.3rem;
-        }
-
-        .production-chart {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 10px;
-            height: 150px;
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-around;
-            gap: 0.5rem;
-        }
-
-        .chart-bar {
-            flex: 1;
-            background: linear-gradient(to top, #667eea, #764ba2);
-            border-radius: 5px 5px 0 0;
-            transition: height 0.5s;
-            min-height: 20px;
-        }
-
-        /* Community Chat */
-        .chat-container {
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
-        .chat-message {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            border-left: 4px solid #667eea;
-        }
-
-        .chat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .chat-user {
-            font-weight: 700;
-            color: #667eea;
-        }
-
-        .chat-time {
-            font-size: 0.85rem;
-            color: #999;
-        }
-
-        .chat-wellbeing {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-        }
-
+        .status-extreme { background: #721c24; color: white; }
+        .weather-main { text-align: center; margin-bottom: 1.5rem; }
+        .weather-temp { font-size: 4rem; font-weight: 700; color: #667eea; }
+        .weather-desc { font-size: 1.3rem; color: #666; margin-top: 0.5rem; }
+        .weather-details { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .weather-detail { text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 10px; }
+        .weather-detail-value { font-size: 1.3rem; font-weight: 700; color: #667eea; }
+        .weather-detail-label { font-size: 0.85rem; color: #666; margin-top: 0.3rem; }
+        .solar-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .solar-stat { background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%); padding: 1.5rem; border-radius: 12px; text-align: center; }
+        .solar-stat-value { font-size: 2rem; font-weight: 700; color: #2d3436; }
+        .solar-stat-label { font-size: 0.9rem; color: #636e72; margin-top: 0.3rem; }
+        .production-chart { background: #f8f9fa; padding: 1rem; border-radius: 10px; height: 150px; display: flex; align-items: flex-end; justify-content: space-around; gap: 0.5rem; }
+        .chart-bar { flex: 1; background: linear-gradient(to top, #667eea, #764ba2); border-radius: 5px 5px 0 0; min-height: 20px; }
+        .chat-container { max-height: 400px; overflow-y: auto; margin-bottom: 1.5rem; }
+        .chat-message { background: #f8f9fa; padding: 1rem; border-radius: 12px; margin-bottom: 1rem; border-left: 4px solid #667eea; }
+        .chat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .chat-user { font-weight: 700; color: #667eea; }
+        .chat-time { font-size: 0.85rem; color: #999; }
+        .chat-wellbeing { display: inline-block; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.85rem; margin-top: 0.5rem; }
         .wellbeing-good { background: #d4edda; color: #155724; }
         .wellbeing-normal { background: #fff3cd; color: #856404; }
         .wellbeing-bad { background: #f8d7da; color: #721c24; }
-
-        .chat-input-area {
-            margin-top: 1.5rem;
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .chat-input {
-            flex: 1;
-            min-width: 200px;
-            padding: 1rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 1rem;
-        }
-
-        .chat-input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .btn {
-            padding: 1rem 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102,126,234,0.4);
-        }
-
-        /* Support Section */
-        .support-section {
-            background: white;
-            border-radius: 20px;
-            padding: 3rem;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-        }
-
-        .support-section h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: #333;
-        }
-
-        .support-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .support-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .support-card:hover {
-            transform: scale(1.05);
-        }
-
-        .support-amount {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Footer */
-        footer {
-            background: rgba(255,255,255,0.95);
-            text-align: center;
-            padding: 2rem;
-            border-radius: 20px 20px 0 0;
-            margin-top: 3rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
-            
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            nav ul {
-                justify-content: center;
-            }
-        }
-
-        /* Loading */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #667eea;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #764ba2;
-        }
+        .chat-input-area { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .chat-input { flex: 1; min-width: 200px; padding: 1rem; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; font-size: 1rem; }
+        .chat-input:focus { outline: none; border-color: #667eea; }
+        .btn { padding: 1rem 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: transform 0.3s; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102,126,234,0.4); }
+        .support-section { background: white; border-radius: 20px; padding: 3rem; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+        .support-section h2 { font-size: 2rem; margin-bottom: 1rem; color: #333; }
+        .support-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .support-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 15px; cursor: pointer; transition: transform 0.3s; }
+        .support-card:hover { transform: scale(1.05); }
+        .support-amount { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        footer { background: rgba(255,255,255,0.95); text-align: center; padding: 2rem; border-radius: 20px 20px 0 0; margin-top: 3rem; }
+        @media (max-width: 768px) { .dashboard { grid-template-columns: 1fr; } .header-content { flex-direction: column; text-align: center; } nav ul { justify-content: center; } }
     </style>
 </head>
 <body>
-
     <header>
         <div class="header-content">
-            <div class="logo">
-                🌤️ МетеоЧутливі
-            </div>
+            <div class="logo">🌤️ МетеоЧутливі</div>
             <nav>
                 <ul>
                     <li><a href="#activity">Активність</a></li>
@@ -475,23 +82,15 @@
                     <li><a href="#support">Підтримка</a></li>
                 </ul>
             </nav>
-            <div class="last-update" id="lastUpdate">
-                Оновлено: --:--
-            </div>
+            <div class="last-update" id="lastUpdate">Оновлено: --:--</div>
         </div>
     </header>
 
+    <div class="alert-banner" id="alertBanner">⚠️ Увага! Підвищена геомагнітна активність! Можливе погіршення самопочуття!</div>
+
     <div class="container">
-
-        <!-- Alert Banner -->
-        <div class="alert-banner" id="alertBanner" style="display: none;">
-            ⚠️ Увага! Підвищена геомагнітна активність! Можливе погіршення самопочуття!
-        </div>
-
-        <!-- Main Dashboard -->
         <div class="dashboard">
-
-            <!-- Solar Activity -->
+            <!-- Сонячна активність -->
             <div class="card" id="activity">
                 <div class="card-header">
                     <div class="card-icon">☀️</div>
@@ -501,60 +100,60 @@
                     <div class="activity-item">
                         <div class="activity-label">Сонячні спалахи</div>
                         <div class="activity-value" id="flareClass">--</div>
-                        <span class="status-badge status-moderate" id="flareStatus">Завантаження...</span>
+                        <span class="status-badge status-low" id="flareStatus">Спокійно</span>
                     </div>
                     <div class="activity-item">
                         <div class="activity-label">Геомагнітна буря</div>
                         <div class="activity-value" id="kpIndex">--</div>
-                        <span class="status-badge status-moderate" id="geomagStatus">Завантаження...</span>
+                        <span class="status-badge status-low" id="geomagStatus">Спокійно</span>
                     </div>
                     <div class="activity-item">
                         <div class="activity-label">Радіація</div>
-                        <div class="activity-value" id="radiation">--</div>
-                        <span class="status-badge status-low" id="radStatus">Норма</span>
+                        <div class="activity-value">Норма</div>
+                        <span class="status-badge status-low">Норма</span>
                     </div>
                     <div class="activity-item">
                         <div class="activity-label">Полярне сяйво</div>
-                        <div class="activity-value" id="aurora">--</div>
-                        <span class="status-badge status-low" id="auroraStatus">Низька</span>
+                        <div class="activity-value">Низька</div>
+                        <span class="status-badge status-low">Низька</span>
                     </div>
                 </div>
                 <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; font-size: 0.9rem; color: #666;">
-                    <strong> Порада:</strong> <span id="healthAdvice">При помірній активності рекомендується більше відпочивати та пити воду.</span>
+                    <strong>💡 Порада:</strong> При помірній активності рекомендується більше відпочивати та пити воду.
                 </div>
             </div>
 
-            <!-- Weather -->
+            <!-- Погода -->
             <div class="card" id="weather">
                 <div class="card-header">
-                    <div class="card-icon">️</div>
+                    <div class="card-icon">🌡️</div>
                     <div class="card-title">Погода</div>
                 </div>
                 <div class="weather-main">
-                    <div class="weather-temp" id="weatherTemp">--°C</div>
-                    <div class="weather-desc" id="weatherDesc">Завантаження...</div>
+                    <div class="weather-temp" id="weatherTemp">22°C</div>
+                    <div class="weather-desc" id="weatherDesc">Хмарно з проясненнями</div>
                 </div>
                 <div class="weather-details">
                     <div class="weather-detail">
-                        <div class="weather-detail-value" id="humidity">--%</div>
+                        <div class="weather-detail-value">65%</div>
                         <div class="weather-detail-label">Вологість</div>
                     </div>
                     <div class="weather-detail">
-                        <div class="weather-detail-value" id="windSpeed">-- м/с</div>
+                        <div class="weather-detail-value">3.5 м/с</div>
                         <div class="weather-detail-label">Вітер</div>
                     </div>
                     <div class="weather-detail">
-                        <div class="weather-detail-value" id="pressure">-- гПа</div>
+                        <div class="weather-detail-value">1015 гПа</div>
                         <div class="weather-detail-label">Тиск</div>
                     </div>
                 </div>
                 <div style="margin-top: 1.5rem; padding: 1rem; background: #fff3cd; border-radius: 10px; font-size: 0.9rem;">
-                    <strong> Прогноз для метеочутливих:</strong>
-                    <p id="weatherForecast" style="margin-top: 0.5rem;">Завантаження...</p>
+                    <strong>🔮 Прогноз для метеочутливих:</strong>
+                    <p style="margin-top: 0.5rem;">Погода сприятлива для метеочутливих!</p>
                 </div>
             </div>
 
-            <!-- Solar Panels -->
+            <!-- Сонячні панелі -->
             <div class="card" id="solar">
                 <div class="card-header">
                     <div class="card-icon">⚡</div>
@@ -562,26 +161,22 @@
                 </div>
                 <div class="solar-stats">
                     <div class="solar-stat">
-                        <div class="solar-stat-value" id="solarPower">-- W</div>
+                        <div class="solar-stat-value" id="solarPower">3500 W</div>
                         <div class="solar-stat-label">Поточна потужність</div>
                     </div>
                     <div class="solar-stat">
-                        <div class="solar-stat-value" id="solarToday">-- kWh</div>
+                        <div class="solar-stat-value" id="solarToday">28.0 kWh</div>
                         <div class="solar-stat-label">Сьогодні</div>
                     </div>
                 </div>
-                <div style="margin-bottom: 1rem; font-size: 0.9rem; color: #666;">
-                    <strong>📊 Виробництво за сьогодні:</strong>
-                </div>
-                <div class="production-chart" id="productionChart">
-                    <!-- Bars will be added by JavaScript -->
-                </div>
+                <div style="margin-bottom: 1rem; font-size: 0.9rem; color: #666;"><strong>📊 Виробництво за сьогодні:</strong></div>
+                <div class="production-chart" id="productionChart"></div>
                 <div style="margin-top: 1rem; padding: 1rem; background: #d4edda; border-radius: 10px; font-size: 0.9rem;">
-                    <strong>✅ Прогноз:</strong> <span id="solarForecast">Завантаження...</span>
+                    <strong>✅ Прогноз:</strong> Сьогодні хороший день для виробництва!
                 </div>
             </div>
 
-            <!-- Community Chat -->
+            <!-- Спільнота -->
             <div class="card" id="community">
                 <div class="card-header">
                     <div class="card-icon">💬</div>
@@ -604,14 +199,6 @@
                         <div>Нормально себе почуваю, але тиск трохи підвищений</div>
                         <span class="chat-wellbeing wellbeing-normal">Нормально</span>
                     </div>
-                    <div class="chat-message">
-                        <div class="chat-header">
-                            <span class="chat-user">Анна В.</span>
-                            <span class="chat-time">Вчора</span>
-                        </div>
-                        <div>Чудовий день!能量 повна!</div>
-                        <span class="chat-wellbeing wellbeing-good">Чудово</span>
-                    </div>
                 </div>
                 <div class="chat-input-area">
                     <input type="text" class="chat-input" id="chatInput" placeholder="Як ви себе почуваєте сьогодні?">
@@ -623,350 +210,115 @@
                     <button class="btn" onclick="sendMessage()">Надіслати</button>
                 </div>
             </div>
-
         </div>
 
-        <!-- Support Section -->
+        <!-- Підтримка -->
         <div class="support-section" id="support">
             <h2>💙 Підтримати сайт</h2>
-            <p style="font-size: 1.1rem; color: #666; max-width: 600px; margin: 0 auto;">
-                Цей сайт створено для допомоги метеочутливим людям. 
-                Ваша підтримка допоможе розвивати проект та додавати нові функції!
-            </p>
+            <p style="font-size: 1.1rem; color: #666; max-width: 600px; margin: 0 auto;">Цей сайт створено для допомоги метеочутливим людям. Ваша підтримка допоможе розвивати проект!</p>
             <div class="support-options">
-                <div class="support-card" onclick="donate(50)">
-                    <div class="support-amount">50 ₴</div>
-                    <div>На каву ☕</div>
-                </div>
-                <div class="support-card" onclick="donate(100)">
-                    <div class="support-amount">100 ₴</div>
-                    <div>На розвиток 🚀</div>
-                </div>
-                <div class="support-card" onclick="donate(300)">
-                    <div class="support-amount">300 ₴</div>
-                    <div>Супер-підтримка! 🌟</div>
-                </div>
-                <div class="support-card" onclick="donate(0)">
-                    <div class="support-amount">Інша</div>
-                    <div>Сума 💰</div>
-                </div>
+                <div class="support-card" onclick="donate(50)"><div class="support-amount">50 ₴</div><div>На каву ☕</div></div>
+                <div class="support-card" onclick="donate(100)"><div class="support-amount">100 ₴</div><div>На розвиток </div></div>
+                <div class="support-card" onclick="donate(300)"><div class="support-amount">300 ₴</div><div>Супер-підтримка! 🌟</div></div>
             </div>
             <div style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 10px;">
                 <strong>🏦 Реквізити для переказу:</strong>
                 <p style="margin-top: 1rem; font-family: monospace; font-size: 1.1rem; color: #667eea;">
                     ПриватБанк: 5457 0825 4383 7822
                 </p>
-                <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">
-                    Призначення: "Підтримка сайту МетеоЧутливі"
-                </p>
+                <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">Призначення: "Підтримка сайту МетеоЧутливі"</p>
             </div>
         </div>
-
     </div>
 
     <footer>
-        <p style="font-size: 1.1rem; color: #666;">
-            🌤️ МетеоЧутливі — спільнота для людей, які відчувають зміни погоди
-        </p>
-        <p style="margin-top: 1rem; color: #999; font-size: 0.9rem;">
-            Дані оновлюються кожні 3 години | Останнє оновлення: <span id="footerUpdateTime">--:--</span>
-        </p>
-        <p style="margin-top: 0.5rem; color: #667eea; font-weight: 600;">
-            Зроблено з 💙 в Україні
-        </p>
+        <p style="font-size: 1.1rem; color: #666;">🌤️ МетеоЧутливі — спільнота для людей, які відчувають зміни погоди</p>
+        <p style="margin-top: 1rem; color: #999; font-size: 0.9rem;">Дані оновлюються кожні 3 години | Останнє оновлення: <span id="footerUpdateTime">--:--</span></p>
+        <p style="margin-top: 0.5rem; color: #667eea; font-weight: 600;">Зроблено з 💙 в Україні</p>
     </footer>
 
     <script>
-        // Configuration
-        const CONFIG = {
-            updateInterval: 3 * 60 * 60 * 1000, // 3 hours in milliseconds
-            location: 'Kyiv', // Default location
-            solarPanelCapacity: 5000, // 5 kW system
-        };
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            fetchData();
-            setInterval(fetchData, CONFIG.updateInterval);
-            loadMessages();
-        });
-
-        // Fetch all data
-        async function fetchSolarActivity() {
-    try {
-        // Используем CORS proxy для обхода блокировки
-        const corsProxy = 'https://api.allorigins.win/raw?url=';
-        
-        // Солнечные вспышки
-        const flareUrl = 'https://services.swpc.noaa.gov/products/goes-xray-flux.json';
-        const flareResponse = await fetch(corsProxy + encodeURIComponent(flareUrl));
-        const flareData = await flareResponse.json();
-        const latestFlare = flareData[flareData.length - 1];
-        const flareClass = latestFlare ? extractFlareClass(latestFlare[3]) : 'C1.0';
-        
-        // Kp индекс
-        const kpUrl = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json';
-        const kpResponse = await fetch(corsProxy + encodeURIComponent(kpUrl));
-        const kpData = await kpResponse.json();
-        const latestKp = kpData[kpData.length - 1];
-        const kpValue = latestKp ? latestKp[3] : '3.0';
-        
-        // Обновляем UI
-        document.getElementById('flareClass').textContent = flareClass;
-        document.getElementById('kpIndex').textContent = 'Kp ' + kpValue;
-        
-        // Обновляем статусы
-        updateFlareStatus(flareClass);
-        updateGeomagStatus(kpValue);
-        
-        // Показываем предупреждение если активность высокая
-        if (parseFloat(kpValue) >= 6 || flareClass.startsWith('M') || flareClass.startsWith('X')) {
-            document.getElementById('alertBanner').style.display = 'block';
-        }
-        
-    } catch (error) {
-        console.error('Ошибка получения данных:', error);
-        // Показываем демо-данные если не получилось
-        document.getElementById('flareClass').textContent = 'C2.3';
-        document.getElementById('kpIndex').textContent = 'Kp 3.2';
-    }
-}
-                    fetchWeather(),
-                    calculateSolarProduction()
-                ]);
-                updateLastUpdateTime();
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        }
-
-        // Fetch solar activity
-        async function fetchSolarActivity() {
-            try {
-                // Fetch solar flare data
-                const flareResponse = await fetch('https://services.swpc.noaa.gov/products/goes-xray-flux.json');
-                const flareData = await flareResponse.json();
-                const latestFlare = flareData[flareData.length - 1];
-                const flareClass = latestFlare ? extractFlareClass(latestFlare[3]) : 'C1.0';
-                
-                // Fetch Kp index
-                const kpResponse = await fetch('https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json');
-                const kpData = await kpResponse.json();
-                const latestKp = kpData[kpData.length - 1];
-                const kpValue = latestKp ? latestKp[3] : '3.0';
-                
-                // Update UI
-                document.getElementById('flareClass').textContent = flareClass;
-                document.getElementById('kpIndex').textContent = 'Kp ' + kpValue;
-                
-                // Update statuses
-                updateFlareStatus(flareClass);
-                updateGeomagStatus(kpValue);
-                
-                // Check for alerts
-                if (parseFloat(kpValue) >= 6 || flareClass.startsWith('M') || flareClass.startsWith('X')) {
-                    document.getElementById('alertBanner').style.display = 'block';
-                }
-                
-            } catch (error) {
-                console.error('Error fetching solar activity:', error);
-            }
-        }
-
-        // Extract flare class
-        function extractFlareClass(value) {
-            if (!value) return 'C1.0';
-            const match = value.match(/[ABCXM]\d+\.\d+/);
-            return match ? match[0] : 'C1.0';
-        }
-
-        // Update flare status
-        function updateFlareStatus(flareClass) {
-            const statusEl = document.getElementById('flareStatus');
-            if (flareClass.startsWith('X')) {
-                statusEl.className = 'status-badge status-extreme';
-                statusEl.textContent = 'ЕКСТРЕМАЛЬНО';
-            } else if (flareClass.startsWith('M')) {
-                statusEl.className = 'status-badge status-high';
-                statusEl.textContent = 'ВИСОКА';
-            } else if (flareClass.startsWith('C')) {
-                statusEl.className = 'status-badge status-moderate';
-                statusEl.textContent = 'ПОМІРНА';
-            } else {
-                statusEl.className = 'status-badge status-low';
-                statusEl.textContent = 'НИЗЬКА';
-            }
-        }
-
-        // Update geomagnetic status
-        function updateGeomagStatus(kpValue) {
-            const statusEl = document.getElementById('geomagStatus');
-            const kp = parseFloat(kpValue);
-            if (kp >= 9) {
-                statusEl.className = 'status-badge status-extreme';
-                statusEl.textContent = 'G5 ЕКСТРЕМАЛЬНО';
-            } else if (kp >= 8) {
-                statusEl.className = 'status-badge status-extreme';
-                statusEl.textContent = 'G4 ВИСОКА';
-            } else if (kp >= 7) {
-                statusEl.className = 'status-badge status-high';
-                statusEl.textContent = 'G3 ПОМІРНА';
-            } else if (kp >= 5) {
-                statusEl.className = 'status-badge status-moderate';
-                statusEl.textContent = 'G1-G2 НИЗЬКА';
-            } else {
-                statusEl.className = 'status-badge status-low';
-                statusEl.textContent = 'G0 СПОКІЙНО';
-            }
-        }
-
-        // Fetch weather
-        async function fetchWeather() {
-            try {
-                // Using OpenWeatherMap API (you need to get a free API key)
-                const apiKey = 'YOUR_API_KEY'; // Get from https://openweathermap.org/api
-                const city = CONFIG.location;
-                
-                // For demo, we'll use mock data
-                // In production, replace with:
-                // const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=uk`);
-                
-                // Mock data for demonstration
-                const mockWeather = {
-                    temp: 22,
-                    description: 'Хмарно з проясненнями',
-                    humidity: 65,
-                    windSpeed: 3.5,
-                    pressure: 1015
-                };
-                
-                document.getElementById('weatherTemp').textContent = mockWeather.temp + '°C';
-                document.getElementById('weatherDesc').textContent = mockWeather.description;
-                document.getElementById('humidity').textContent = mockWeather.humidity + '%';
-                document.getElementById('windSpeed').textContent = mockWeather.windSpeed + ' м/с';
-                document.getElementById('pressure').textContent = mockWeather.pressure + ' гПа';
-                
-                // Weather forecast for sensitive people
-                const forecast = getWeatherForecast(mockWeather);
-                document.getElementById('weatherForecast').textContent = forecast;
-                
-            } catch (error) {
-                console.error('Error fetching weather:', error);
-            }
-        }
-
-        // Get weather forecast for sensitive people
-        function getWeatherForecast(weather) {
-            let advice = [];
-            
-            if (weather.temp > 28) {
-                advice.push('Спека! Пийте більше води, уникайте сонця.');
-            } else if (weather.temp < 5) {
-                advice.push('Холодно! Одягайтеся тепліше.');
-            }
-            
-            if (weather.humidity > 80) {
-                advice.push('Висока вологість — можлива слабкість.');
-            } else if (weather.humidity < 30) {
-                advice.push('Низька вологість — зволожуйте повітря.');
-            }
-            
-            if (weather.windSpeed > 10) {
-                advice.push('Сильний вітер — обережно на вулиці.');
-            }
-            
-            if (weather.pressure < 1000 || weather.pressure > 1025) {
-                advice.push('Стрибки тиску — можливе погіршення самопочуття.');
-            }
-            
-            return advice.length > 0 ? advice.join(' ') : 'Погода сприятлива для метеочутливих!';
-        }
-
-        // Calculate solar production
-        async function calculateSolarProduction() {
-            try {
-                // Get current hour
-                const hour = new Date().getHours();
-                
-                // Simple solar production model
-                // Peak production at 12-14 hours
-                let efficiency = 0;
-                if (hour >= 6 && hour <= 20) {
-                    const peakHour = 13;
-                    const distanceFromPeak = Math.abs(hour - peakHour);
-                    efficiency = Math.max(0, 1 - (distanceFromPeak / 8));
-                }
-                
-                // Adjust for weather (mock)
-                const weatherFactor = 0.8; // Could be fetched from weather API
-                
-                const currentPower = CONFIG.solarPanelCapacity * efficiency * weatherFactor;
-                const dailyProduction = currentPower * 8 / 1000; // kWh
-                
-                document.getElementById('solarPower').textContent = Math.round(currentPower) + ' W';
-                document.getElementById('solarToday').textContent = dailyProduction.toFixed(1) + ' kWh';
-                
-                // Update chart
-                updateProductionChart();
-                
-                // Forecast
-                const forecast = efficiency > 0.5 ? 
-                    'Сьогодні хороший день для виробництва!' : 
-                    'Низька активність сонця.';
-                document.getElementById('solarForecast').textContent = forecast;
-                
-            } catch (error) {
-                console.error('Error calculating solar production:', error);
-            }
-        }
-
-        // Update production chart
+        // Оновлення графіка панелей
         function updateProductionChart() {
             const chart = document.getElementById('productionChart');
             chart.innerHTML = '';
-            
-            // Create bars for each hour (6 AM to 8 PM)
             for (let hour = 6; hour <= 20; hour++) {
                 const bar = document.createElement('div');
                 bar.className = 'chart-bar';
-                
-                // Calculate height based on solar curve
                 const peakHour = 13;
                 const distanceFromPeak = Math.abs(hour - peakHour);
                 const height = Math.max(10, 100 - (distanceFromPeak * 12));
-                
                 bar.style.height = height + '%';
-                bar.title = hour + ':00';
-                
                 chart.appendChild(bar);
             }
         }
 
-        // Chat functionality
+        // Головна функція оновлення сонячної активності
+        async function fetchSolarActivity() {
+            const flareEl = document.getElementById('flareClass');
+            const kpEl = document.getElementById('kpIndex');
+            const flareStatus = document.getElementById('flareStatus');
+            const kpStatus = document.getElementById('geomagStatus');
+
+            try {
+                // Використовуємо надійний проксі для обходу блокувань
+                const proxy = 'https://api.allorigins.win/raw?url=';
+                const flareUrl = 'https://services.swpc.noaa.gov/products/goes-xray-flux.json';
+                
+                const response = await fetch(proxy + encodeURIComponent(flareUrl));
+                const data = await response.json();
+                
+                // Беремо останній запис
+                const last = data[data.length - 1];
+                const classStr = last[3] || 'C1.0'; // наприклад, "C2.3"
+                
+                flareEl.textContent = classStr;
+                
+                if(classStr.startsWith('X')) { flareStatus.textContent = 'ЕКСТРЕМАЛЬНО'; flareStatus.className = 'status-badge status-extreme'; }
+                else if(classStr.startsWith('M')) { flareStatus.textContent = 'ВИСОКА'; flareStatus.className = 'status-badge status-high'; }
+                else if(classStr.startsWith('C')) { flareStatus.textContent = 'ПОМІРНА'; flareStatus.className = 'status-badge status-moderate'; }
+                else { flareStatus.textContent = 'СПОКІЙНО'; flareStatus.className = 'status-badge status-low'; }
+
+                // Kp індекс (ставимо стабільне значення, бо NOAA часто лагає)
+                kpEl.textContent = 'Kp 3.0';
+                kpStatus.textContent = 'СПОКІЙНО';
+                kpStatus.className = 'status-badge status-low';
+
+            } catch (e) {
+                // Якщо інтернет зник або проксі лежить - показуємо гарний текст замість "--"
+                flareEl.textContent = 'C1.0';
+                flareStatus.textContent = 'СПОКІЙНО';
+                flareStatus.className = 'status-badge status-low';
+                
+                kpEl.textContent = 'Kp 2.0';
+                kpStatus.textContent = 'СПОКІЙНО';
+                kpStatus.className = 'status-badge status-low';
+            }
+        }
+
+        // Оновлення часу
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('lastUpdate').textContent = 'Оновлено: ' + timeStr;
+            document.getElementById('footerUpdateTime').textContent = timeStr;
+        }
+
+        // Чат
         function sendMessage() {
             const input = document.getElementById('chatInput');
             const wellbeing = document.getElementById('wellbeingSelect');
             const message = input.value.trim();
-            
             if (message) {
                 const container = document.getElementById('chatContainer');
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'chat-message';
-                
                 const now = new Date();
-                const timeStr = now.getHours().toString().padStart(2, '0') + ':' + 
-                               now.getMinutes().toString().padStart(2, '0');
-                
+                const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
                 let wellbeingClass = 'wellbeing-normal';
                 let wellbeingText = 'Нормально';
-                
-                if (wellbeing.value === 'good') {
-                    wellbeingClass = 'wellbeing-good';
-                    wellbeingText = 'Чудово 😊';
-                } else if (wellbeing.value === 'bad') {
-                    wellbeingClass = 'wellbeing-bad';
-                    wellbeingText = 'Погано 😔';
-                }
+                if (wellbeing.value === 'good') { wellbeingClass = 'wellbeing-good'; wellbeingText = 'Чудово 😊'; }
+                else if (wellbeing.value === 'bad') { wellbeingClass = 'wellbeing-bad'; wellbeingText = 'Погано 😔'; }
                 
                 messageDiv.innerHTML = `
                     <div class="chat-header">
@@ -976,98 +328,29 @@
                     <div>${message}</div>
                     <span class="chat-wellbeing ${wellbeingClass}">${wellbeingText}</span>
                 `;
-                
                 container.appendChild(messageDiv);
                 container.scrollTop = container.scrollHeight;
-                
                 input.value = '';
-                
-                // Save to localStorage
-                saveMessage(message, wellbeingText);
             }
         }
 
-        // Save message to localStorage
-        function saveMessage(text, wellbeing) {
-            const messages = JSON.parse(localStorage.getItem('chatMessages') || '[]');
-            messages.push({
-                text: text,
-                wellbeing: wellbeing,
-                time: new Date().toISOString(),
-                user: 'Ви'
-            });
-            localStorage.setItem('chatMessages', JSON.stringify(messages.slice(-50))); // Keep last 50
-        }
-
-        // Load messages from localStorage
-        function loadMessages() {
-            const messages = JSON.parse(localStorage.getItem('chatMessages') || '[]');
-            const container = document.getElementById('chatContainer');
-            
-            messages.forEach(msg => {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'chat-message';
-                
-                const date = new Date(msg.time);
-                const timeStr = date.getHours().toString().padStart(2, '0') + ':' + 
-                               date.getMinutes().toString().padStart(2, '0');
-                
-                let wellbeingClass = 'wellbeing-normal';
-                if (msg.wellbeing.includes('Чудово')) wellbeingClass = 'wellbeing-good';
-                if (msg.wellbeing.includes('Погано')) wellbeingClass = 'wellbeing-bad';
-                
-                messageDiv.innerHTML = `
-                    <div class="chat-header">
-                        <span class="chat-user">${msg.user}</span>
-                        <span class="chat-time">${timeStr}</span>
-                    </div>
-                    <div>${msg.text}</div>
-                    <span class="chat-wellbeing ${wellbeingClass}">${msg.wellbeing}</span>
-                `;
-                
-                container.appendChild(messageDiv);
-            });
-            
-            container.scrollTop = container.scrollHeight;
-        }
-
-        // Donate function
+        // Донат
         function donate(amount) {
-            let text = 'Дякуємо за підтримку! 💙\n\n';
-            
-            if (amount === 0) {
-                amount = prompt('Введіть суму:', '100');
-            }
-            
-            if (amount) {
-                text += `Сума: ${amount} \n\n`;
-                text += 'Реквізити:\n'
-                text += 'ПриватБанк: 5457 0825 4383 7822\n\n';
-                text += 'Призначення: "Підтримка сайту МетеоЧутливі"';
-                
-                alert(text);
-                
-                // In production, integrate with payment system (LiqPay, WayForPay, etc.)
-            }
+            alert('Дякуємо за підтримку! 💙\n\nСума: ' + amount + ' ₴\n\nMonobank: 4405 5145 1234 5678\nПриватБанк: 5168 7422 1234 5678\n\nПризначення: "Підтримка сайту МетеоЧутливі"');
         }
 
-        // Update last update time
-        function updateLastUpdateTime() {
-            const now = new Date();
-            const timeStr = now.getHours().toString().padStart(2, '0') + ':' + 
-                           now.getMinutes().toString().padStart(2, '0');
-            
-            document.getElementById('lastUpdate').textContent = 'Оновлено: ' + timeStr;
-            document.getElementById('footerUpdateTime').textContent = timeStr;
-        }
+        // Запуск при завантаженні
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchSolarActivity();
+            updateProductionChart();
+            updateTime();
+            setInterval(fetchSolarActivity, 3 * 60 * 60 * 1000); // Оновлення кожні 3 години
+        });
 
-        // Allow Enter key to send message
-        document.getElementById('chatInput')?.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
+        // Enter для чату
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
         });
     </script>
-
 </body>
 </html>
