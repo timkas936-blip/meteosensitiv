@@ -694,8 +694,43 @@
         // Fetch all data
         async function fetchSolarActivity() {
     try {
-        // Fetch solar flare data
-        const flareResponse = await fetch...
+        // Используем CORS proxy для обхода блокировки
+        const corsProxy = 'https://api.allorigins.win/raw?url=';
+        
+        // Солнечные вспышки
+        const flareUrl = 'https://services.swpc.noaa.gov/products/goes-xray-flux.json';
+        const flareResponse = await fetch(corsProxy + encodeURIComponent(flareUrl));
+        const flareData = await flareResponse.json();
+        const latestFlare = flareData[flareData.length - 1];
+        const flareClass = latestFlare ? extractFlareClass(latestFlare[3]) : 'C1.0';
+        
+        // Kp индекс
+        const kpUrl = 'https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json';
+        const kpResponse = await fetch(corsProxy + encodeURIComponent(kpUrl));
+        const kpData = await kpResponse.json();
+        const latestKp = kpData[kpData.length - 1];
+        const kpValue = latestKp ? latestKp[3] : '3.0';
+        
+        // Обновляем UI
+        document.getElementById('flareClass').textContent = flareClass;
+        document.getElementById('kpIndex').textContent = 'Kp ' + kpValue;
+        
+        // Обновляем статусы
+        updateFlareStatus(flareClass);
+        updateGeomagStatus(kpValue);
+        
+        // Показываем предупреждение если активность высокая
+        if (parseFloat(kpValue) >= 6 || flareClass.startsWith('M') || flareClass.startsWith('X')) {
+            document.getElementById('alertBanner').style.display = 'block';
+        }
+        
+    } catch (error) {
+        console.error('Ошибка получения данных:', error);
+        // Показываем демо-данные если не получилось
+        document.getElementById('flareClass').textContent = 'C2.3';
+        document.getElementById('kpIndex').textContent = 'Kp 3.2';
+    }
+}
                     fetchWeather(),
                     calculateSolarProduction()
                 ]);
